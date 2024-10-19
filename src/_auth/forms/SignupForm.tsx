@@ -20,7 +20,8 @@ import { createUserAccount } from "@/lib/appwrite/api";
 const SignupForm = () => {
   const isLoading = false;
 
-  // 1. Define your form.
+  // 1. Define your form. We first define the schema of the forms which is in the SignUpValidationSchema. We then use the useForm hook to create a form instance.
+  // Then we pass it into the resolver.
   const form = useForm<z.infer<typeof SignupValidationSchema>>({
     resolver: zodResolver(SignupValidationSchema),
     defaultValues: {
