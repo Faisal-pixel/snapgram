@@ -14,11 +14,21 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SignupValidationSchema } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
-import { Link } from "react-router-dom";
-import { createUserAccount } from "@/lib/appwrite/api";
+import { Link, useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { useCreateUserAccountMutation, useSignInAccountMutation } from "@/lib/react-query/queriesAndMutations";
 
 const SignupForm = () => {
-  const isLoading = false;
+  const {toast} = useToast();
+  
+  const navigate = useNavigate();
+
+  const {checkAuthUser, isLoading: isUserLoading} = useUserContext();
+
+  // We get to destructure the mutateAsync function which is actually the createUserAccount that we are calling in the useCreateUserAccountMutation.
+  // Remember we pass it as a method. You can check it out.
+  const { mutateAsync: createUserAccount, isLoading: isCreatingUser } = useCreateUserAccountMutation(); // Its a hook from the react-query library that we use to create a new user account. Find it in the queriesAndMutations.ts file
+  const { mutateAsync: signInAccount, isLoading: isSigningin } = useSignInAccountMutation();
 
   // 1. Define your form. We first define the schema of the forms which is in the SignUpValidationSchema. We then use the useForm hook to create a form instance.
   // Then we pass it into the resolver.
@@ -37,7 +47,36 @@ const SignupForm = () => {
     // Once submitted, we want to create the user
     const newUser = await createUserAccount(values);
 
-    console.log(newUser);
+    if(!newUser) {
+      return toast ({
+        title: "Sign up failed. Please try again",
+      })
+    } 
+    // After creating a user. We then always want to sign the user into a session
+    const session = await signInAccount({
+      email: values.email,
+      password: values.password
+    });
+
+    if(!session) {
+      return toast ({
+        title: "Sign in failed. Please try again",
+      })
+    }
+
+    // Now we need to store the user session in a context. We need to know at all time that we have a user logged in.
+
+    const isLoggedin = await checkAuthUser();
+
+    if(isLoggedin) {
+      form.reset();
+
+      navigate('/');
+    } else {
+      return toast({
+        title: "Sign in failed. Please try again",
+      })
+    }
   }
   return (
     <Form {...form}>
@@ -106,7 +145,7 @@ const SignupForm = () => {
           />
           <Button type="submit" className="shad-button_primary">
             {
-              isLoading ? (
+              isCreatingUser ? (
                 <div className="flex-center gap-2">
                  <Loader />  Loading...
                 </div>
