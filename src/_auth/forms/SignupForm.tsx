@@ -17,6 +17,7 @@ import Loader from "@/components/shared/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useCreateUserAccountMutation, useSignInAccountMutation } from "@/lib/react-query/queriesAndMutations";
+import { useUserContext } from "@/context/AuthContext";
 
 const SignupForm = () => {
   const {toast} = useToast();
@@ -70,7 +71,6 @@ const SignupForm = () => {
 
     if(isLoggedin) {
       form.reset();
-
       navigate('/');
     } else {
       return toast({

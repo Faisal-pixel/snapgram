@@ -9,7 +9,7 @@ import { INewUser } from '@/types';
 
 export const useCreateUserAccountMutation = () => {
     // so here we are using the useMutation hook to create a new user account. We are passing in an object of methods.
-    // Firs is the mutationFn that is basically an arrow function the calls the createUserAccount function from the api.
+    // First is the mutationFn that is basically an arrow function that calls the createUserAccount function from the api.
     // So then we can use it at the client side
     return useMutation({
         mutationFn: (user: INewUser) => createUserAccount(user),

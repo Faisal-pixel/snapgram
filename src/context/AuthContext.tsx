@@ -24,7 +24,7 @@ const INITIAL_STATE = {
   isAuthenticated: false,
   setUser: () => {},
   setIsAuthenticated: () => {},
-  checkAuthUser: async () => false as boolean,
+  checkAuthUser: async () => false as boolean, // means it will return false or a value as a boolean value
 };
 
 const AuthContext = createContext<IContextType>(INITIAL_STATE);
@@ -67,6 +67,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if(
+      // Appwrite calls the cookie 'cookieFallback' and stores it as an array. So we are checking if the cookieFallback is an empty array or null
         localStorage.getItem('cookieFallback') === '[]' ||
         localStorage.getItem('cookieFallback') === null
     ) navigate('/sign-in');
