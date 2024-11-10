@@ -2,10 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useSignOutAccountMutation } from "@/lib/react-query/queriesAndMutations";
 import { useEffect } from "react";
+import { useUserContext } from "@/context";
 
 // Desc: Topbar component
 const Topbar = () => {
     const navigate = useNavigate();
+
+    const {user} = useUserContext();
 
     const { mutate: signOut, isSuccess } = useSignOutAccountMutation();
 
@@ -34,6 +37,14 @@ const Topbar = () => {
                         alt="logout"
                     />
                 </Button>
+
+                <Link to={`/profile/${user.id}`} className="flex-center gap-3">
+                    <img 
+                        src={user.imageUrl || "./assets/images/profile-placeholder.svg"} 
+                        alt="profile" 
+                        className="h-8 w-8 rounded-full"
+                    />
+                </Link>
             </div>
         </div>
     </section>

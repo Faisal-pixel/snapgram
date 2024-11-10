@@ -59,3 +59,4 @@ But you might get an error because typescript does know that env exist on import
 2. So I noticed that when I cleared the localStorage while testing. I tried signing in wwith the account I already created, but it did not
 set the localStorage to the cookieFallback. Seems appwrite doesnt create the cookieFallback when you sign in a user but it does when you
 create a account. So in the AuthContext, I changed the condition to check if the localStorage is equal to null, then set it to the cookieFallback with an empty array. That way when we sign in, appwrite can set the value of the users in the cookieFallback. This time when we refresh, there is a user.
+3. So i changed 1 back to the initial value because we want the topbar to be hidden on larger screens
