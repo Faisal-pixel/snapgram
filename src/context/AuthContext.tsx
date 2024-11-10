@@ -1,18 +1,12 @@
 import { getCurrentUser } from "@/lib/appwrite/api";
 import { IContextType, IUser } from "@/types";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { INITIAL_USER } from "./ContextConstant";
 
 // We need to define how an empty user will look like
 
-export const INITIAL_USER = {
-  id: "",
-  name: "",
-  username: "",
-  email: "",
-  imageUrl: "",
-  bio: "",
-};
+
 
 // We need to create the initial state of the user.
 // incluse user which is set to Initial_user, isLoading to false (the intial state of a user), isAuthenticated to false,
@@ -27,7 +21,7 @@ const INITIAL_STATE = {
   checkAuthUser: async () => false as boolean, // means it will return false or a value as a boolean value
 };
 
-const AuthContext = createContext<IContextType>(INITIAL_STATE);
+export const AuthContext = createContext<IContextType>(INITIAL_STATE);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<IUser>(INITIAL_USER);
@@ -40,6 +34,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // found in the api.ts file that stores the appwrite functins.
   const checkAuthUser = async () => {
     try {
+      setIsLoading(true);
       const currentAccount = await getCurrentUser();
 
       if (currentAccount) {
@@ -68,9 +63,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if(
       // Appwrite calls the cookie 'cookieFallback' and stores it as an array. So we are checking if the cookieFallback is an empty array or null
-        localStorage.getItem('cookieFallback') === '[]' ||
-        localStorage.getItem('cookieFallback') === null
-    ) navigate('/sign-in');
+        localStorage.getItem('cookieFallback') === '[]' 
+    ) {
+      navigate('/sign-in')
+    } else if (localStorage.getItem('cookieFallback') === null) {
+      localStorage.setItem('cookieFallback', '[]')
+    }
 
     checkAuthUser();
   }, [])
@@ -89,4 +87,3 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 export default AuthProvider;
 
-export const useUserContext = () => useContext(AuthContext);

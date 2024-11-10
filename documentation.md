@@ -51,3 +51,11 @@ But you might get an error because typescript does know that env exist on import
 
 ### New Programming Terms:
 1. Mutating data means modifying or changing the original data. For example, if you have an array of numbers and you change one of the numbers, you are mutating the array. In JavaScript, arrays and objects are mutable, which means you can change their values. This is in contrast to immutable data structures, where you cannot change the values of the data structure. In JavaScript, strings and numbers are immutable, which means you cannot change their values. Instead, you have to create a new string or number with the new value. This is why you have to use the set function to update the state in React. The set function creates a new state with the new value instead of changing the original state.
+
+
+### LOGS
+1. Changed the styling of the topbar class. Before it says ```md:hidden``` which bascally hides the topbar but I changed it to 
+```hidden md:block``` which hides the topbar on small screens and shows it on larger screens.
+2. So I noticed that when I cleared the localStorage while testing. I tried signing in wwith the account I already created, but it did not
+set the localStorage to the cookieFallback. Seems appwrite doesnt create the cookieFallback when you sign in a user but it does when you
+create a account. So in the AuthContext, I changed the condition to check if the localStorage is equal to null, then set it to the cookieFallback with an empty array. That way when we sign in, appwrite can set the value of the users in the cookieFallback. This time when we refresh, there is a user.

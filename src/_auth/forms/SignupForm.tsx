@@ -17,7 +17,7 @@ import Loader from "@/components/shared/Loader";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useCreateUserAccountMutation, useSignInAccountMutation } from "@/lib/react-query/queriesAndMutations";
-import { useUserContext } from "@/context/AuthContext";
+import { useUserContext } from "@/context/index";
 
 const SignupForm = () => {
   const {toast} = useToast();
@@ -28,8 +28,8 @@ const SignupForm = () => {
 
   // We get to destructure the mutateAsync function which is actually the createUserAccount that we are calling in the useCreateUserAccountMutation.
   // Remember we pass it as a method. You can check it out.
-  const { mutateAsync: createUserAccount, isLoading: isCreatingUser } = useCreateUserAccountMutation(); // Its a hook from the react-query library that we use to create a new user account. Find it in the queriesAndMutations.ts file
-  const { mutateAsync: signInAccount, isLoading: isSigningin } = useSignInAccountMutation();
+  const { mutateAsync: createUserAccount, isPending: isCreatingUser } = useCreateUserAccountMutation(); // Its a hook from the react-query library that we use to create a new user account. Find it in the queriesAndMutations.ts file
+  const { mutateAsync: signInAccount, isPending: isSigningin } = useSignInAccountMutation();
 
   // 1. Define your form. We first define the schema of the forms which is in the SignUpValidationSchema. We then use the useForm hook to create a form instance.
   // Then we pass it into the resolver.

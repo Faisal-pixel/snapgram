@@ -4,7 +4,7 @@ import {
     useQueryClient, // Used for interacting with the query client
     useInfiniteQuery, // Used for querying paginated data
 } from '@tanstack/react-query';
-import { createUserAccount, signInAccount } from '../appwrite/api';
+import { createUserAccount, signInAccount, signOutAccount } from '../appwrite/api';
 import { INewUser } from '@/types';
 
 export const useCreateUserAccountMutation = () => {
@@ -21,5 +21,11 @@ export const useSignInAccountMutation = () => {
         // We are passing in the mutationFn that is an arrow function that calls the signInAccount function from the api.
         // But here user is an object that has email and password.
         mutationFn: (user: {email: string; password: string}) => signInAccount(user),
+    })
+}
+export const useSignOutAccountMutation = () => {
+    return useMutation({
+        // We are passing in the mutationFn that is an arrow function that calls the signOutAccount function from the api.
+        mutationFn: signOutAccount,
     })
 }
